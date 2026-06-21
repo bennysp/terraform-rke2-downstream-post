@@ -9,16 +9,19 @@ locals {
   autoscaler_mount        = length(local.autoscaler_secret_parts) > 0 ? local.autoscaler_secret_parts[0] : ""
   autoscaler_name         = length(local.autoscaler_secret_parts) > 1 ? join("/", slice(local.autoscaler_secret_parts, 1, length(local.autoscaler_secret_parts))) : ""
 
-  kubeconfig_raw      = try(tostring(data.vault_kv_secret_v2.kubeconfig.data["data"]), "")
-  kubeconfig_yaml     = trimspace(local.kubeconfig_raw) != "" ? base64decode(local.kubeconfig_raw) : ""
+  kubeconfig_path_expanded = pathexpand(var.kubeconfig_location)
+  kubeconfig_yaml          = try(file(local.kubeconfig_path_expanded), "")
   kubeconfig_decoded  = try(yamldecode(local.kubeconfig_yaml), {})
-  k8s_host            = try(local.kubeconfig_decoded.clusters[1].cluster.server, "")
-  k8s_ca              = try(base64decode(local.kubeconfig_decoded.clusters[1].cluster["certificate-authority-data"]), "")
+  k8s_host            = try(local.kubeconfig_decoded.clusters[0].cluster.server, "")
+  k8s_ca              = try(base64decode(local.kubeconfig_decoded.clusters[0].cluster["certificate-authority-data"]), "")
   k8s_mgmt_host       = try(local.kubeconfig_decoded.clusters[0].cluster.server, "")
   k8s_mgmt_ca         = try(base64decode(local.kubeconfig_decoded.clusters[0].cluster["certificate-authority-data"]), "")
   k8s_token           = try(local.kubeconfig_decoded.users[0].user.token, "")
   k8s_mgmt_basehost   = length(split("/", local.k8s_mgmt_host)) > 2 ? split("/", local.k8s_mgmt_host)[2] : ""
-  k8s_mgmt_token      = try(base64decode(data.vault_kv_secret_v2.cluster_autoscaler_token.data["token"]), "")
+  k8s_mgmt_token      = local.k8s_token
+
+  k8s_host_effective  = local.k8s_host != "" ? local.k8s_host : "https://127.0.0.1"
+  k8s_token_effective = local.k8s_token != "" ? local.k8s_token : "plan-placeholder-token"
 
   summary = {
     cluster_name                  = local.cluster_name_effective

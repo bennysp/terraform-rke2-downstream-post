@@ -44,17 +44,8 @@ resource "kubernetes_secret" "vault_k8s_sa_token" {
   wait_for_service_account_token = true
 }
 
-data "kubernetes_secret" "vault_helm_secret_name" {
-  depends_on = [kubernetes_secret.vault_k8s_sa_token]
-
-  metadata {
-    name      = var.k8s_sa_vault
-    namespace = var.vault_ns
-  }
-}
-
 locals {
-  k8s_token_jwt = nonsensitive(data.kubernetes_secret.vault_helm_secret_name.data.token)
+  k8s_token_jwt = local.k8s_token_effective
 }
 
 resource "vault_kubernetes_auth_backend_config" "vault_auth_config" {
