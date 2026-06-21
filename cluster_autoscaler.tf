@@ -1,6 +1,4 @@
 resource "kubernetes_secret" "cluster_autoscaler_cloud_config" {
-  count = var.enable_cluster_autoscaler ? 1 : 0
-
   metadata {
     name      = "cluster-autoscaler-cloud-config"
     namespace = "kube-system"
@@ -19,8 +17,6 @@ EOF
 }
 
 resource "kubernetes_config_map" "ca_cert" {
-  count = var.enable_cluster_autoscaler ? 1 : 0
-
   metadata {
     name      = "ca-cert"
     namespace = "kube-system"

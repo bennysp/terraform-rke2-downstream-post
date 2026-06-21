@@ -88,8 +88,3 @@ variable "k8s_sa_vault" {
   default = "vault"
 }
 
-variable "enable_cluster_autoscaler" {
-  description = "Enable downstream cluster-autoscaler post configuration."
-  type        = bool
-  default     = true
-}

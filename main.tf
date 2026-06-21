@@ -25,6 +25,5 @@ locals {
     kubeconfig_location          = var.kubeconfig_location
     vault_kubeconfig_secret_path = var.vault_kubeconfig_secret_path
     vault_cluster_autoscaler_path = var.vault_cluster_autoscaler_path
-    enable_cluster_autoscaler    = var.enable_cluster_autoscaler
   }
 }
