@@ -3,23 +3,23 @@ terraform {
 
   required_providers {
     vault = {
-      source  = "hashicorp/vault"
+      source  = "nexus.ta.domain.thedaily.tv/hashicorp/vault"
       version = "~> 3.10"
     }
     kubernetes = {
-      source  = "hashicorp/kubernetes"
+      source  = "nexus.ta.domain.thedaily.tv/hashicorp/kubernetes"
       version = "~> 2.29"
     }
     kubectl = {
-      source  = "gavinbunney/kubectl"
+      source  = "nexus.ta.domain.thedaily.tv/gavinbunney/kubectl"
       version = "~> 1.14"
     }
     helm = {
-      source  = "hashicorp/helm"
+      source  = "nexus.ta.domain.thedaily.tv/hashicorp/helm"
       version = "~> 2.7"
     }
     rancher2 = {
-      source  = "rancher/rancher2"
+      source  = "nexus.ta.domain.thedaily.tv/rancher/rancher2"
       version = "~> 7.2"
     }
   }
